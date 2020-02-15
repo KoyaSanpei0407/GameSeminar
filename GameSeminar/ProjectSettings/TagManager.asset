@@ -7,6 +7,14 @@ TagManager:
   - bullet
   - P1_bullet
   - P2_bullet
+  - Player1
+  - Player2
+  - Bom
+  - BomBullet
+  - SquareUp
+  - SquareDown
+  - SquareLeft
+  - SquareRight
   layers:
   - Default
   - TransparentFX

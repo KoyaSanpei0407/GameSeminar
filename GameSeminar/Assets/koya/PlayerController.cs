@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public int pnum;
     private string pnum_s;
     private float lh, lv, rh, rv;
+    float time;
 
     float angle;
 
@@ -21,6 +23,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        time = 0.0f;
         hp = 10;
         pnum_s = pnum.ToString();
     }
@@ -28,44 +31,57 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Lスティックの入力
-        lh = Input.GetAxis("Controller" + pnum_s + "_LStickX");
-        lv = Input.GetAxis("Controller" + pnum_s  + "_LStickY");
-        //移動
-        if ((lh != 0) || (lv != 0))
+        time += Time.deltaTime;
+        if (time >= 3.0f)
         {
-            Vector3 pos = transform.position;
-            pos.y += speed * Time.deltaTime * lv;
-            pos.x += speed * Time.deltaTime * lh;
-            transform.position = pos;
+            //Lスティックの入力
+            lh = Input.GetAxis("Controller" + pnum_s + "_LStickX");
+            lv = Input.GetAxis("Controller" + pnum_s + "_LStickY");
+            //移動
+            if ((lh != 0) || (lv != 0))
+            {
+                Vector3 pos = transform.position;
+                pos.y += speed * Time.deltaTime * lv;
+                pos.x += speed * Time.deltaTime * lh;
+                transform.position = pos;
+            }
+
+            //Rスティックの入力
+            rh = Input.GetAxis("Controller" + pnum_s + "_RStickX");
+            rv = Input.GetAxis("Controller" + pnum_s + "_RStickY");
+            //回転
+            if ((rh != 0) || (rv != 0))
+            {
+                angle = (Mathf.Atan2(rv, rh) * Mathf.Rad2Deg) - 90.0f;
+                transform.rotation = Quaternion.Euler(0.0f, 0.0f, angle);
+
+
+                // 弾の発射タイミングを管理するタイマーを更新する
+                m_shotTimer += Time.deltaTime;
+
+                // まだ弾の発射タイミングではない場合は、ここで処理を終える
+                if (m_shotTimer < m_shotInterval) return;
+
+                // 弾の発射タイミングを管理するタイマーをリセットする
+                m_shotTimer = 0;
+
+                // 弾を発射する
+                ShootNWay(angle + 90.0f, m_shotAngleRange, m_shotSpeed, m_shotCount);
+            }
+
+            //Hpが0
+            if (hp == 0)
+            {
+                if (pnum == 1)
+                {
+                    SceneManager.LoadScene("Player2P");
+                }
+                else if (pnum == 2)
+                {
+                    SceneManager.LoadScene("Player1P");
+                }
+            }
         }
-
-        //Rスティックの入力
-        rh = Input.GetAxis("Controller" + pnum_s + "_RStickX");
-        rv = Input.GetAxis("Controller" + pnum_s + "_RStickY");
-        //回転
-        if ((rh != 0) || (rv != 0))
-        {
-            angle = (Mathf.Atan2(rv, rh) * Mathf.Rad2Deg) - 90.0f;
-            transform.rotation = Quaternion.Euler(0.0f, 0.0f, angle);
-        }
-
-        if(hp == 0)
-        {
-            Destroy(gameObject);
-        }
-
-        // 弾の発射タイミングを管理するタイマーを更新する
-        m_shotTimer += Time.deltaTime;
-
-        // まだ弾の発射タイミングではない場合は、ここで処理を終える
-        if (m_shotTimer < m_shotInterval) return;
-
-        // 弾の発射タイミングを管理するタイマーをリセットする
-        m_shotTimer = 0;
-
-        // 弾を発射する
-        ShootNWay(angle + 90.0f, m_shotAngleRange, m_shotSpeed, m_shotCount);
     }
 
     void OnTriggerEnter2D(Collider2D col)
@@ -87,7 +103,11 @@ public class PlayerController : MonoBehaviour
                 Destroy(col.gameObject);
             }
         }
-
+        if(col.gameObject.tag == "bullet")
+        {
+            hp -= 1;
+            Destroy(col.gameObject);
+        }
 
     }
 

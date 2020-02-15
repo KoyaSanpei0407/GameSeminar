@@ -36,7 +36,7 @@ public class Shot : MonoBehaviour
         transform.localEulerAngles = angles;
 
         // 2 秒後に削除する
-        Destroy(gameObject, 2);
+        Destroy(gameObject, 7);
     }
 }
 
