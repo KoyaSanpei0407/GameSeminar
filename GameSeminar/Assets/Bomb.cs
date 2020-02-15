@@ -13,19 +13,19 @@ public class Bomb : MonoBehaviour
     // Start is called before the first frame update
     void Start()//ｘとｙの角度をランダム生成する
     {
-         x = Random.Range(-1f, 1f);
+        x = Random.Range(-1f, 1f);
         y = Random.Range(-1f, 1f);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)//壁に当たったら反射させる
     {
-            if(collision.gameObject.name == "SquareUp") 
+        if (collision.gameObject.tag == "SquareUp")
             x *= -1;
-            if (collision.gameObject.name == "SquareDown")
+        if (collision.gameObject.tag == "SquareDown")
             x *= -1;
-            if (collision.gameObject.name == "SquareLeft")
+        if (collision.gameObject.tag == "SquareLeft")
             y *= -1;
-            if (collision.gameObject.name == "SquareRight")
+        if (collision.gameObject.tag == "SquareRight")
             y *= -1;
     }
     // Update is called once per frame

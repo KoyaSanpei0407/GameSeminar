@@ -11,8 +11,8 @@ public class B_bulletGenerate : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        x = Random.Range(-8, 8);
-        y = Random.Range(-5, 5);
+        x = transform.position.x;
+        y = transform.position.y;
         for (int i = 0; i <= bulletnumber; i++)
         {
             GameObject obj = (GameObject)Resources.Load("Bombbullet");
