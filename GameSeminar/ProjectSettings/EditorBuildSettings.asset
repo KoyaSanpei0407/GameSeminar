@@ -14,7 +14,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Master/Scene/GameScene.unity
     guid: 01463b59a9791f04b873d71875132630
-  - enabled: 1
+  - enabled: 0
     path: Assets/Master/Scene/ResultScene.unity
     guid: 623a97f495d7bf24abda43f9e55a2693
+  - enabled: 1
+    path: Assets/Master/Scene/Player1P.unity
+    guid: 85102267f9056014786fecef752f8983
+  - enabled: 1
+    path: Assets/Master/Scene/Player2P.unity
+    guid: 545c2120f0598284ab12aea3863f371d
   m_configObjects: {}
